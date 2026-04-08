@@ -32,7 +32,7 @@ Thumbs.db
 
 # Temp / debug output files
 *.txt
-!README.md
+!requirements.txt
 
 # Docker
 *.tar
