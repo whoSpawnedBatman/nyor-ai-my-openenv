@@ -1,8 +1,8 @@
-# ── Hospital Quotation OpenEnv — Dockerfile ───────────────────────────────────
+# ── Pharma B2B Quotation Hub — Dockerfile ───────────────────────────────────
 FROM python:3.11-slim
 
-LABEL maintainer="Nyor AI"
-LABEL description="Nyor AI - Hospital Quotation OpenEnv benchmark server"
+LABEL maintainer="Nyor AI Team"
+LABEL description="Nyor AI - Pharma B2B Quotation Hub benchmark server"
 
 # System deps
 RUN apt-get update && apt-get install -y --no-install-recommends \

@@ -1,13 +1,13 @@
 """
-Hospital Quotation Environment — Inference Script
+Pharma B2B Quotation Environment — Inference Script
 =================================================
 Mandatory variables (set in environment or .env):
     API_BASE_URL   The API endpoint for the LLM.
     MODEL_NAME     The model identifier to use for inference.
-    HF_TOKEN       Your Hugging Face / API key.
+    OPENAI_API_KEY The API key for the LLM.
 
 STDOUT FORMAT
-    [START] task=<task_name> env=hospital model=<model_name>
+    [START] task=<task_name> env=pharma-b2b model=<model_name>
     [STEP]  step=<n> action=<action_str> reward=<0.00> done=<true|false> error=<msg|null>
     [END]   success=<true|false> steps=<n> score=<score> rewards=<r1,r2,...,rn>
 """
@@ -28,7 +28,7 @@ for _env_candidate in [
             for _line in _f:
                 if "=" in _line and not _line.startswith("#"):
                     _k, _v = _line.strip().split("=", 1)
-                    os.environ.setdefault(_k, _v)
+                    os.environ.setdefault(_k, _v.strip('"').strip("'"))
         break
 
 warnings.filterwarnings("ignore")
@@ -37,26 +37,26 @@ warnings.filterwarnings("ignore")
 sys.path.insert(0, os.path.dirname(__file__))
 
 from openai import OpenAI
-from env.environment import HospitalQuotationEnv, TASKS, normalize_score
+from env.environment import PharmaQuotationEnv, TASKS, normalize_score
 
 # ── Config ────────────────────────────────────────────────────────────────────
 API_BASE_URL = os.getenv("API_BASE_URL", "https://api.openai.com/v1")
 MODEL_NAME   = os.getenv("MODEL_NAME",   "gpt-4o-mini")
-HF_TOKEN     = os.getenv("HF_TOKEN")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-if not HF_TOKEN:
+if not OPENAI_API_KEY:
     raise ValueError(
-        "HF_TOKEN environment variable is required. "
+        "OPENAI_API_KEY environment variable is required. "
         "Set it in your .env file or shell environment."
     )
 
-MAX_STEPS   = 10
+MAX_STEPS   = 12
 TEMPERATURE = 0.0   # deterministic for reproducibility
-MAX_TOKENS  = 60
+MAX_TOKENS  = 100
 
-# Tasks to run — must be 3+
-TASK_NAMES = list(TASKS.keys())   # ["quotation", "brand-selection", "margin-check"]
-BENCHMARK  = "hospital"
+# Tasks to run
+TASK_NAMES = list(TASKS.keys())
+BENCHMARK  = "pharma-b2b"
 
 # ── Stdout helpers ────────────────────────────────────────────────────────────
 def log_start(task: str, env: str, model: str) -> None:
@@ -85,7 +85,8 @@ def log_end(success: bool, steps: int, score: float,
 
 # ── LLM helper ────────────────────────────────────────────────────────────────
 SYSTEM_PROMPT = textwrap.dedent("""
-    You are an AI agent operating inside a hospital medicine quotation system.
+    You are an AI agent operating inside a Pharma B2B Distribution Quotation system.
+    Your goal is to source medications for business clients with optimal margins.
 
     Available actions (return ONLY ONE, exactly as shown):
       search_brands:<generic_name>
@@ -97,8 +98,7 @@ SYSTEM_PROMPT = textwrap.dedent("""
 
     Rules:
     - Do NOT repeat an action already listed in Past Actions Taken.
-    - For calculate_price, supply a sell price at least 8% above the buy rate
-      (you don't know buy rate exactly; use 110% of a reasonable estimate).
+    - For calculate_price, supply a sell price at least 8% above the buy rate.
     - Call finalize only after: brand selected, supplier selected,
       request_confirmation done, and calculate_price done.
     - Return EXACTLY the action string — no explanation, no extra text.
@@ -126,7 +126,7 @@ def get_action(client: OpenAI, state_str: str) -> str:
 # ── Episode runner ────────────────────────────────────────────────────────────
 def run_task(client: OpenAI, task_name: str) -> float:
     """Run a single task episode; return normalised score ∈ [0.0, 1.0]."""
-    env     = HospitalQuotationEnv(task=task_name)
+    env     = PharmaQuotationEnv(task=task_name)
     rewards: List[float] = []
     steps_taken = 0
     success     = False
@@ -157,7 +157,7 @@ def run_task(client: OpenAI, task_name: str) -> float:
                 break
 
         score   = env.score()          # normalised [0, 1]
-        success = score > 0.0
+        success = score >= 0.8         # benchmark pass threshold
 
     except Exception as exc:
         print(f"[DEBUG] Episode error: {exc}", flush=True)
@@ -175,7 +175,7 @@ def run_task(client: OpenAI, task_name: str) -> float:
 
 # ── Main ─────────────────────────────────────────────────────────────────────
 def main() -> None:
-    client = OpenAI(base_url=API_BASE_URL, api_key=HF_TOKEN)
+    client = OpenAI(base_url=API_BASE_URL, api_key=OPENAI_API_KEY)
 
     all_scores: List[float] = []
     for task_name in TASK_NAMES:

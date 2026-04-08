@@ -7,17 +7,17 @@ from ddgs import DDGS
 # ─── Task Registry ────────────────────────────────────────────────────────────
 TASKS = {
     "quotation": {
-        "description": "Full quotation: search brand, select brand+supplier, confirm, calculate price, finalize.",
+        "description": "Full B2B quotation: search brand, select brand+supplier, confirm, calculate price, finalize.",
         "max_reward": 14.5,   # sum of all positive step rewards (0.5+1+1+1+1+10)
         "min_reward": -15.0,
     },
     "brand-selection": {
-        "description": "Select the correct brand and supplier without searching.",
+        "description": "Optimized brand selection: pick correct brand+supplier for Pharma distribution.",
         "max_reward": 3.0,    # search(0) + brand(1) + supplier(1) + confirm(1)
         "min_reward": -3.0,
     },
     "margin-check": {
-        "description": "Calculate a price that meets the 8% margin requirement and finalize.",
+        "description": "B2B Profitability logic: calculate price meeting 8% margin requirement.",
         "max_reward": 11.0,   # brand(1)+supplier(1)+confirm(1)+calculateprice(1)+finalize(10) - but we pre-seed brand/supplier
         "min_reward": -7.0,
     },
@@ -33,11 +33,11 @@ def normalize_score(raw: float, task: str) -> float:
     return max(0.0, min(1.0, score))
 
 
-class HospitalQuotationEnv:
+class PharmaQuotationEnv:
     def __init__(self, task: str = "quotation"):
         self.task = task if task in TASKS else "quotation"
         self.state: Optional[EnvironmentState] = None
-        self.min_margin = 0.08        # 8% minimum margin
+        self.min_margin = 0.08        # 8% minimum margin for B2B profitability
         self._cumulative_reward = 0.0
 
     # ── OpenEnv-compatible API ─────────────────────────────────────────────

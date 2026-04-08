@@ -1,47 +1,45 @@
 # openenv.yaml — OpenEnv Benchmark Specification
 # Validates with: openenv validate
 
-name: hospital-quotation
+name: pharma-b2b-quotation
 version: "1.0.0"
 description: >
-  A gym-style simulation of hospital medicine quotation preparation.
-  An LLM agent must search for brands, select the correct brand and
-  supplier, confirm availability, calculate a sell price meeting the
-  minimum 8% margin, and finalize the quotation.
+  A professional B2B simulation of pharmaceutical medicine quotation.
+  Distributors must source medications from brands, verify suppliers,
+  and calculate optimal margins for downstream business customers.
 
-benchmark: hospital
+benchmark: pharma-b2b
 
 tasks:
   - name: quotation
     description: >
-      Full quotation workflow: search brand, select brand+supplier,
-      confirm, calculate price, finalize. Randomly picks Pantoprazole
-      or Paracetamol order.
+      Full B2B workflow: sourcing brand, selecting supplier,
+      confirming availability, calculating 8%+ margin, and finalizing.
     grader:
       type: reward
       min: 0.0
       max: 1.0
-      pass_threshold: 0.1
+      pass_threshold: 0.8
 
   - name: brand-selection
     description: >
       Select the correct (cheapest valid) brand and supplier for
-      Pantoprazole without web search.
+      pharmaceutical distribution requirements without web search.
     grader:
       type: reward
       min: 0.0
       max: 1.0
-      pass_threshold: 0.1
+      pass_threshold: 0.8
 
   - name: margin-check
     description: >
-      Given a pre-selected brand and supplier, calculate a sell price
-      that satisfies the 8% minimum margin and finalize the quotation.
+      Given a pre-selected pharma brand, calculate a sell price
+      ensuring business profitability (8% minimum margin).
     grader:
       type: reward
       min: 0.0
       max: 1.0
-      pass_threshold: 0.1
+      pass_threshold: 0.8
 
 environment:
   type: http
@@ -71,15 +69,16 @@ observation:
     - score
 
 reward:
-  range: [-5.0, 10.0]
+  range: [0.0, 1.0]
   normalized: true
   normalize_method: min_max_clamp
 
 metadata:
-  author: Nyor AI
+  author: Nyor AI Team
   license: MIT
   tags:
-    - healthcare
-    - quotation
+    - pharmaceutical
+    - supply-chain
+    - b2b-quotation
     - llm-agent
     - openenv
