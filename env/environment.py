@@ -2,7 +2,7 @@ import random
 from typing import Tuple, Dict, Any, Optional
 from env.models import Order, EnvironmentState, Quotation
 from env.data import get_products_by_generic
-from ddgs import DDGS
+from duckduckgo_search import DDGS
 
 # ─── Task Registry ────────────────────────────────────────────────────────────
 TASKS = {
