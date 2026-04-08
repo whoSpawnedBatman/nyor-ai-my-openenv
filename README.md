@@ -1,3 +1,11 @@
+---
+title: Pharma B2B Quotation
+emoji: 🌍
+colorFrom: indigo
+colorTo: blue
+sdk: docker
+pinned: false
+---
 # Nyor AI: B2B Pharma Quotation Hub
 
 OpenEnv Compatible Benchmark | License: MIT
