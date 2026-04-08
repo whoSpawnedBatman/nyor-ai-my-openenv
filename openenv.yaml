@@ -1,0 +1,85 @@
+# openenv.yaml — OpenEnv Benchmark Specification
+# Validates with: openenv validate
+
+name: hospital-quotation
+version: "1.0.0"
+description: >
+  A gym-style simulation of hospital medicine quotation preparation.
+  An LLM agent must search for brands, select the correct brand and
+  supplier, confirm availability, calculate a sell price meeting the
+  minimum 8% margin, and finalize the quotation.
+
+benchmark: hospital
+
+tasks:
+  - name: quotation
+    description: >
+      Full quotation workflow: search brand, select brand+supplier,
+      confirm, calculate price, finalize. Randomly picks Pantoprazole
+      or Paracetamol order.
+    grader:
+      type: reward
+      min: 0.0
+      max: 1.0
+      pass_threshold: 0.1
+
+  - name: brand-selection
+    description: >
+      Select the correct (cheapest valid) brand and supplier for
+      Pantoprazole without web search.
+    grader:
+      type: reward
+      min: 0.0
+      max: 1.0
+      pass_threshold: 0.1
+
+  - name: margin-check
+    description: >
+      Given a pre-selected brand and supplier, calculate a sell price
+      that satisfies the 8% minimum margin and finalize the quotation.
+    grader:
+      type: reward
+      min: 0.0
+      max: 1.0
+      pass_threshold: 0.1
+
+environment:
+  type: http
+  reset_endpoint: /reset
+  step_endpoint: /step
+  state_endpoint: /state
+  host: "0.0.0.0"
+  port: 7860
+
+actions:
+  - search_brands:<generic_name>
+  - select_brand:<brand_name>
+  - select_supplier:<supplier_name>
+  - request_confirmation
+  - calculate_price:<number>
+  - finalize
+
+observation:
+  type: text
+  fields:
+    - order
+    - selected_brand
+    - selected_supplier
+    - calculated_price
+    - supplier_confirmed
+    - action_history
+    - score
+
+reward:
+  range: [-5.0, 10.0]
+  normalized: true
+  normalize_method: min_max_clamp
+
+metadata:
+  author: Meta X Scaler
+  license: MIT
+  tags:
+    - healthcare
+    - quotation
+    - llm-agent
+    - openenv

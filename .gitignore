@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+.venv/
+venv/
+env_venv/
+
+# Environment / secrets — NEVER commit your API keys
+.env
+*.env
+
+# Byte-compiled / optimized
+*.pyc
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp / debug output files
+*.txt
+!README.md
+
+# Docker
+*.tar
