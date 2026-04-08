@@ -1,5 +1,5 @@
 """
-OpenEnv-compatible FastAPI server for Hospital Quotation Environment.
+OpenEnv-compatible FastAPI server for Pharmaceutical business Quotation Environment.
 Exposes: POST /reset  POST /step  GET /state
 """
 
@@ -18,8 +18,8 @@ from pydantic import BaseModel
 from env.environment import HospitalQuotationEnv, TASKS
 
 app = FastAPI(
-    title="Hospital Quotation OpenEnv",
-    description="OpenEnv-compatible hospital medicine quotation benchmark.",
+    title="Nyor AI - Hospital Quotation OpenEnv",
+    description="OpenEnv-compatible pharmaceutical medicine quotation benchmark.",
     version="1.0.0",
 )
 

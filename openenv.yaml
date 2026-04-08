@@ -76,7 +76,7 @@ reward:
   normalize_method: min_max_clamp
 
 metadata:
-  author: Meta X Scaler
+  author: Nyor AI
   license: MIT
   tags:
     - healthcare

@@ -1,4 +1,4 @@
-# Hospital Quotation OpenEnv
+# Nyor AI - Hospital Quotation OpenEnv
 
 An OpenEnv-compatible benchmark environment that simulates hospital medicine quotation preparation using an LLM agent.
 

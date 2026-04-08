@@ -1,8 +1,8 @@
 # ── Hospital Quotation OpenEnv — Dockerfile ───────────────────────────────────
 FROM python:3.11-slim
 
-LABEL maintainer="Meta X Scaler"
-LABEL description="Hospital Quotation OpenEnv benchmark server"
+LABEL maintainer="Nyor AI"
+LABEL description="Nyor AI - Hospital Quotation OpenEnv benchmark server"
 
 # System deps
 RUN apt-get update && apt-get install -y --no-install-recommends \
