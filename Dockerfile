@@ -25,4 +25,4 @@ ENV PYTHONPATH=/app
 EXPOSE 7860
 
 # Run the FastAPI server
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "7860"]
+CMD ["python", "server/app.py"]

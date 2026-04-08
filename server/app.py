@@ -9,7 +9,7 @@ import os
 import sys
 from typing import Any, Dict, Optional, List
 
-sys.path.insert(0, os.path.dirname(__file__))
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
@@ -180,6 +180,9 @@ def list_tasks():
     return JSONResponse(content={"tasks": TASKS})
 
 
-if __name__ == "__main__":
+def start():
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=7860)
+    uvicorn.run("server.app:app", host="0.0.0.0", port=7860)
+
+if __name__ == "__main__":
+    start()
