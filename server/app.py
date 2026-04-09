@@ -156,7 +156,7 @@ def step(req: Action):
         observation=_get_observation(env),
         reward=round(raw_reward, 4),
         done=done,
-        score=round(env.score(), 4),
+        score=env.score(),
         info=info,
     )
 

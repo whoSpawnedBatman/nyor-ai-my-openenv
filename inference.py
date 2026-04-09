@@ -1,4 +1,4 @@
-print("[VERSION] Nyor AI Inference v1.0.5", flush=True)
+print("[VERSION] Nyor AI Inference v1.0.6", flush=True)
 """
 Pharma B2B Quotation Environment — Inference Script
 =================================================
@@ -81,7 +81,7 @@ def log_end(success: bool, steps: int, score: float,
     rewards_str = ",".join(f"{r:.2f}" for r in rewards)
     print(
         f"[END] success={str(success).lower()} steps={steps} "
-        f"score={score:.2f} rewards={rewards_str}",
+        f"score={score:.4f} rewards={rewards_str}",
         flush=True,
     )
 
@@ -191,8 +191,8 @@ def main() -> None:
     avg = sum(all_scores) / len(all_scores) if all_scores else 0.0
     print(
         f"\n[SUMMARY] tasks={len(all_scores)} "
-        f"avg_score={avg:.2f} "
-        f"scores={','.join(f'{s:.2f}' for s in all_scores)}",
+        f"avg_score={avg:.4f} "
+        f"scores={','.join(f'{s:.4f}' for s in all_scores)}",
         flush=True,
     )
 

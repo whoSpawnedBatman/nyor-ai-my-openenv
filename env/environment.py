@@ -24,13 +24,14 @@ TASKS = {
 }
 
 def normalize_score(raw: float, task: str) -> float:
-    """Clamp and normalise raw cumulative reward → [0.0, 1.0]."""
+    """Clamp and normalise raw cumulative reward → strictly (0.0, 1.0)."""
     info = TASKS.get(task, TASKS["quotation"])
     mn, mx = info["min_reward"], info["max_reward"]
     if mx == mn:
-        return 0.0
+        return 0.01
     score = (raw - mn) / (mx - mn)
-    return max(0.0, min(1.0, score))
+    # Clamp to [0.01, 0.99] to ensure scores are strictly within (0, 1)
+    return max(0.01, min(0.99, score))
 
 
 class PharmaQuotationEnv:
