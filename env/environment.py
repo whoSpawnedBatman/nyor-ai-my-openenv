@@ -28,13 +28,14 @@ def normalize_score(raw: float, task: str) -> float:
     info = TASKS.get(task, TASKS["quotation"])
     mn, mx = info["min_reward"], info["max_reward"]
     if mx == mn:
-        return 0.01
+        return 0.1
     
     # Linear normalization inside the widened bounds
     score = (raw - mn) / (mx - mn)
     
-    # Extra safety clamp to [0.01, 0.99] to ensure scores are strictly within (0, 1)
-    return max(0.01, min(0.99, score))
+    # Aggressive safety clamp to [0.10, 0.90] to ensure scores are strictly within (0, 1)
+    # and stay far away from integer boundaries to avoid any precision/rounding bugs.
+    return max(0.10, min(0.90, score))
 
 
 class PharmaQuotationEnv:

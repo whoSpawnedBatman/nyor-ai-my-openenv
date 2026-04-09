@@ -1,4 +1,4 @@
-print("[VERSION] Nyor AI Inference v1.0.7", flush=True)
+print("[VERSION] Nyor AI Inference v1.0.8", flush=True)
 """
 Pharma B2B Quotation Environment — Inference Script
 =================================================

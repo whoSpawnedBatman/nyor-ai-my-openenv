@@ -69,8 +69,8 @@ observation:
     - score
 
 reward:
-  range: [0.0, 1.0]
-  normalized: true
+  range: [-20.0, 16.0]
+  normalized: false
   normalize_method: min_max_clamp
 
 metadata:
