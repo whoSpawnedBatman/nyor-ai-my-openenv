@@ -1,3 +1,4 @@
+print("[VERSION] Nyor AI Inference v1.0.4", flush=True)
 """
 Pharma B2B Quotation Environment — Inference Script
 =================================================
@@ -45,9 +46,9 @@ MODEL_NAME   = os.getenv("MODEL_NAME",   "gpt-4o-mini")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY") or os.getenv("HF_TOKEN")
 
 if not OPENAI_API_KEY:
-    # Provide a dummy key for Phase 2 validation dry-runs
+    # Use a dummy key for Phase 2 validation dry-runs
     OPENAI_API_KEY = "sk-dummy-key-for-openenv-validation"
-    print("[WARNING] OPENAI_API_KEY unset. Falling back to dummy key.", flush=True)
+    print("[WARNING] API key not found. Using dummy key for baseline execution.", flush=True)
 
 MAX_STEPS   = 12
 TEMPERATURE = 0.0   # deterministic for reproducibility
