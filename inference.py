@@ -1,4 +1,4 @@
-print("[VERSION] Nyor AI Inference v1.0.4", flush=True)
+print("[VERSION] Nyor AI Inference v1.0.5", flush=True)
 """
 Pharma B2B Quotation Environment — Inference Script
 =================================================
@@ -45,10 +45,12 @@ API_BASE_URL = os.getenv("API_BASE_URL", "https://api.openai.com/v1")
 MODEL_NAME   = os.getenv("MODEL_NAME",   "gpt-4o-mini")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY") or os.getenv("HF_TOKEN")
 
+# Validator defensive fallback
 if not OPENAI_API_KEY:
-    # Use a dummy key for Phase 2 validation dry-runs
-    OPENAI_API_KEY = "sk-dummy-key-for-openenv-validation"
-    print("[WARNING] API key not found. Using dummy key for baseline execution.", flush=True)
+    OPENAI_API_KEY = "sk-no-key-provided-by-validator"
+    print(f"[WARNING] OPENAI_API_KEY not found in environment. Using fallback key.", flush=True)
+else:
+    print(f"[INFO] API key detected (ends in ...{OPENAI_API_KEY[-4:] if len(OPENAI_API_KEY)>4 else '***'})", flush=True)
 
 MAX_STEPS   = 12
 TEMPERATURE = 0.0   # deterministic for reproducibility
@@ -175,7 +177,11 @@ def run_task(client: OpenAI, task_name: str) -> float:
 
 # ── Main ─────────────────────────────────────────────────────────────────────
 def main() -> None:
-    client = OpenAI(base_url=API_BASE_URL, api_key=OPENAI_API_KEY)
+    try:
+        client = OpenAI(base_url=API_BASE_URL, api_key=OPENAI_API_KEY)
+    except Exception as e:
+        print(f"[CRITICAL] Failed to initialize OpenAI client: {e}", flush=True)
+        return
 
     all_scores: List[float] = []
     for task_name in TASK_NAMES:
